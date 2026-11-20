@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "988975493260",
+    "project_id": "penaltyshootout-341f9",
+    "storage_bucket": "penaltyshootout-341f9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:988975493260:android:a366cf8026743b9a428ba9",
+        "android_client_info": {
+          "package_name": "com.example.penaltyshootout"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr1MsVqzxCS4xNHdGJe78y8jWSqBEPZYA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
