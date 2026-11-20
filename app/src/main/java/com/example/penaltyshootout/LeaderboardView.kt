@@ -4,33 +4,28 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 
-class LeaderboardView : View {
-
+class LeaderboardView  {
     private lateinit var paint : Paint
-    private lateinit var leaderBoard : Array<Array<String>>
-    private lateinit var scroll : ScrollView
-    constructor(context : Context, leaderBoard : Array<Array<String>>) : super(context) {
-        this.paint = Paint()
-        paint.color = Color.BLACK
-        paint.strokeWidth = 3.0f
-        paint.isAntiAlias = true
+    private lateinit var leaderboard : Array<Array<String>>
+    private lateinit var leaderboardClass : Leaderboard
+    private lateinit var leaderboardContainer : RecyclerView
 
-        this.leaderBoard = leaderBoard
-
-        this.scroll = ScrollView(context)
-    }
 
     override fun onDraw(canvas : Canvas){
         super.onDraw(canvas)
-        for(i in leaderBoard){
-            var temp = TextView(context)
-            temp.text = i[0] + "   " + i[1] + "   " + i[2]
-            scroll.addView(temp)
-        }
-        scroll.draw(canvas)
+
+        canvas.drawCircle(500f, 500f, 30f, paint)
+    }
+
+    companion object {
+        const val DELTA_TIME : Long = 100L
+
     }
 }
