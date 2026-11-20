@@ -1,4 +1,7 @@
 package com.example.penaltyshootout
 
-class Game {
+import androidx.appcompat.app.AppCompatActivity
+
+class Game: AppCompatActivity() {
+    
 }

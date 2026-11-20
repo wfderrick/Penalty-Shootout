@@ -1,20 +1,39 @@
 package com.example.penaltyshootout
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
+
+    private lateinit var playButton : TextView
+    private lateinit var leaderboardButton : TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        playButton = findViewById<TextView>(R.id.play_button)
+        leaderboardButton = findViewById<TextView>(R.id.leaderboard_button)
+    }
+
+    override fun onClick(v : View?){
+        when (v?.id){
+            R.id.play_button -> { startPlay() }
+            R.id.leaderboard_button -> { openLeaderboard() }
         }
+    }
+
+    fun startPlay(){
+        var intent = Intent(this, Game::class.java)
+        startActivity(intent)
+    }
+
+    fun openLeaderboard(){
+        var intent = Intent(this, LeaderBoard::class.java)
+        startActivity(intent)
     }
 }
