@@ -18,11 +18,7 @@ class LeaderboardView  {
     private lateinit var leaderboardContainer : RecyclerView
 
 
-    override fun onDraw(canvas : Canvas){
-        super.onDraw(canvas)
 
-        canvas.drawCircle(500f, 500f, 30f, paint)
-    }
 
     companion object {
         const val DELTA_TIME : Long = 100L
