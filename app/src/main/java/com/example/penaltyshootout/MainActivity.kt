@@ -13,8 +13,9 @@ import com.example.penaltyshootout.R.id
 import com.example.penaltyshootout.R.id.*
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import kotlin.collections.toMutableList
 
-class MainActivity : AppCompatActivity(), View.OnClickListener, SharedPreferences {
+class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var playButton : TextView
     private lateinit var leaderboard : Leaderboard
@@ -49,10 +50,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SharedPreference
         }
     }
 
-    fun retrieveSavedLeaderBoard(){
+//    fun retrieveSavedLeaderBoard(){
+//        pref.getString("leaderboard", null)
+//
+//    }
 
-    }
-
+//    fun getLeaderboardFromString(){
+//        var editable = MutableList(20, {Array})
+//
+//    }
 
     fun startPlay(){
         var intent = Intent(this, Game::class.java)
@@ -64,7 +70,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, SharedPreference
         recyclerView = findViewById(id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = MyAdapter(leaderboard.getLeaderboard())
-        leaderboard.newScore("test", 0, databaseRef)
+//        leaderboard.newScore("test", 0, databaseRef)
 
 
     }
