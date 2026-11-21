@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter(private val itemList : List<ItemModel>) : RecyclerView.Adapter<MyAdapter.TileViewHolder>() {
+class MyAdapter(private val itemList : List<Array<String>>) : RecyclerView.Adapter<MyAdapter.TileViewHolder>() {
 
     class TileViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tile: TextView = view.findViewById(R.id.tileTitle)
+        val rank : TextView = view.findViewById(R.id.rank)
+        val username : TextView = view.findViewById(R.id.username)
+        val score : TextView = view.findViewById(R.id.score)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TileViewHolder {
@@ -20,7 +22,9 @@ class MyAdapter(private val itemList : List<ItemModel>) : RecyclerView.Adapter<M
 
     override fun onBindViewHolder(holder: TileViewHolder, position: Int) {
         val item = itemList[position]
-        holder.tile.text = item.rank.toString() + "  " + item.username + "  " + item.score.toString()
+        holder.rank.text = (position + 1).toString()
+        holder.username.text = item[1]
+        holder.score.text = item[2]
     }
 
     override fun getItemCount(): Int = itemList.size

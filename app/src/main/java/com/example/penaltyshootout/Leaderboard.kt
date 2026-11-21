@@ -11,42 +11,50 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import org.json.JSONArray
 
-class Leaderboard(
-private val items: List<String>,
-private val onTileClick: (String) -> Unit
-) : RecyclerView.Adapter<Leaderboard.TileViewHolder>() {
+class Leaderboard : ValueEventListener {
 
-    class TileViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.findViewById(R.id.tileTitle)
+    private lateinit var leaderboard : List<Array<String>>
+
+    constructor(ref : DatabaseReference){
+
+    }
+    override fun onDataChange(snapshot: DataSnapshot) {
+        var json = JSONArray(snapshot.value.toString())
+        var editable = leaderboard.toMutableList()
+        for (i in 0 until leaderboard.size){
+            var inner = JSONArray(json.get(i))
+            editable[i][1] = inner.getString(1)
+            editable[i][2] = inner.getInt(2).toString()
+        }
+        leaderboard = editable
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TileViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_tile, parent, false)
-        return TileViewHolder(view)
+    override fun onCancelled(error: DatabaseError) {
+        Log.w("Leaderboard", error.code.toString())
     }
 
-    override fun onBindViewHolder(holder: TileViewHolder, position: Int) {
-        val item = items[position]
-        holder.title.text = item
-        holder.itemView.setOnClickListener { onTileClick(item) }
+    fun getLeaderboard() : List<Array<String>>{
+        return leaderboard
     }
-
-    override fun getItemCount(): Int = items.size
-
-
-
-    fun getLeaderboard() : Array<Array<String>>{
-        var firebase = FirebaseDatabase.getInstance()
-        var ref = firebase.getReference("leaderboard")
-        var test = ref.toString()
-        Log.w("Leaderboard", test)
-
-        var res = Array<Array<String>>(20, {Array<String>(3, {"0"})})
-        return res
+    fun newScore(username : String, score : Int, ref : DatabaseReference){
+        var editable = leaderboard.toMutableList()
+        var result = editable
+        var i = 0
+        while (i < leaderboard.size){
+            if (score > editable[i][2].toInt()){
+                result = (editable.subList(0, i) + arrayOf("0", username, score.toString()) + editable.subList(i, leaderboard.size))  as MutableList<Array<String>>
+                break
+            }
+        }
+        if (result.size > 20){
+            result = result.subList(0, result.size - 1)
+        }
+        ref.setValue(result)
     }
 
 
