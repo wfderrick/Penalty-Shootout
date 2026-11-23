@@ -49,22 +49,22 @@ class Leaderboard : ValueEventListener, Thread {
         return leaderboard
     }
 
-//    fun newScore(username : String, score : Int, ref : DatabaseReference){
-//        var editable = leaderboard.toMutableList()
-//        var result = editable
-//        var i = 0
-//        while (i < leaderboard.size){
-//            if (score > editable[i][2].toInt()){
-//                result = (editable.subList(0, i) + arrayOf("0", username, score.toString()) + editable.subList(i, leaderboard.size))  as MutableList<Array<String>>
-//                break
-//            }
-//            i++
-//        }
-//        if (result.size > 20){
-//            result = result.subList(0, result.size - 1)
-//        }
-//        ref.setValue(result)
-//    }
+    fun newScore(username : String, score : Int, ref : DatabaseReference){
+        var editable = leaderboard.toMutableList()
+        var result = editable
+        var i = 0
+        while (i < leaderboard.size){
+            if (score > editable[i][2].toInt()){
+                result = (editable.subList(0, i) + arrayOf("0", username, score.toString()) + editable.subList(i, leaderboard.size))  as MutableList<List<String>>
+                break
+            }
+            i++
+        }
+        if (result.size > 20){
+            result = result.subList(0, result.size - 1)
+        }
+        ref.setValue(result)
+    }
 
 
 }

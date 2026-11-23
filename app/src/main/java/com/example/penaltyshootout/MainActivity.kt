@@ -14,16 +14,21 @@ import com.example.penaltyshootout.R.id
 import com.example.penaltyshootout.R.id.*
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import org.json.JSONArray
 import kotlin.collections.toMutableList
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    private lateinit var playButton : TextView
     private lateinit var leaderboard : Leaderboard
     private lateinit var leaderboardButton : TextView
+    private lateinit var home : TextView
+    private lateinit var play : TextView
+    private lateinit var playButton : TextView
     private lateinit var recyclerView : RecyclerView
     private lateinit var databaseRef : DatabaseReference
     private lateinit var pref : SharedPreferences
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,32 +44,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         playButton.setOnClickListener(this)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        saveLeaderboardLocal()
-    }
-
     override fun onClick(v : View?){
         when (v?.id){
             play_button -> { startPlay() }
             leaderboard_button -> { openLeaderboard() }
+//            play -> {  }
+            R.id.home -> { setContentView(R.layout.activity_main) }
+
         }
-    }
-
-    fun retrieveSavedLeaderBoard() : List<List<String>>{
-        pref.getString("leaderboard", null)
-        return listOf(listOf("0","0","0"), listOf("0","0","0"),listOf("0","0","0"),listOf("0","0","0"),listOf("0","0","0"))
-    }
-
-//    fun getLeaderboardFromString(){
-//        var editable = MutableList(20, {Array})
-//
-//    }
-
-    fun saveLeaderboardLocal(){
-        var editor = pref.edit()
-        editor.putString("leaderboard", leaderboard.getLeaderboard().toString())
-        editor.commit()
     }
 
     fun startPlay(){
@@ -74,11 +61,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     fun openLeaderboard(){
         setContentView(R.layout.leaderboard)
-        recyclerView = findViewById(id.recyclerView)
+        recyclerView = findViewById(R.id.recyclerView)
+        home = findViewById<TextView>(R.id.home)
+        play = findViewById<TextView>(R.id.play)
+        home.setOnClickListener(this)
+        play.setOnClickListener(this)
         recyclerView.layoutManager = LinearLayoutManager(this)
         var getRes = leaderboard.getLeaderboard()
         if(getRes.get(0).get(1) == ""){
-            getRes = this.retrieveSavedLeaderBoard()
+            getRes = List<List<String>>(20, {List<String>(3, {"0"})})
         }
         recyclerView.adapter = MyAdapter(getRes)
 
