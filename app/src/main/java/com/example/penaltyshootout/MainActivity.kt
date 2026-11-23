@@ -39,6 +39,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         playButton.setOnClickListener(this)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        saveLeaderboardLocal()
+    }
+
     override fun onClick(v : View?){
         when (v?.id){
             play_button -> { startPlay() }
