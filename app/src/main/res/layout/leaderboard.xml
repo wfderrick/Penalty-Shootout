@@ -2,7 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <Button
+        android:text="Home"
+        android:id="@+id/home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/center"
+        android:padding="8dp"
+        android:layout_marginRight="10dp"
+    />
+    <TextView
+        android:id="@+id/center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" "
+        android:layout_centerHorizontal="true"
+        />
+    <Button
+        android:text="Play"
+        android:id="@+id/play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/center"
+        android:padding="8dp"
+        android:layout_marginLeft="10dp"
+        />
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/home"
         android:id="@+id/recyclerView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

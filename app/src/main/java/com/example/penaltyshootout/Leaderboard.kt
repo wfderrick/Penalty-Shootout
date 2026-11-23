@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -16,24 +17,28 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import org.json.JSONArray
 
-class Leaderboard : ValueEventListener {
+class Leaderboard : ValueEventListener, Thread {
 
-    private lateinit var leaderboard : List<List<String>>
+    private var leaderboard : List<List<String>> = listOf(listOf("", "", ""))
+    private lateinit var activity : MainActivity
+    private var retrieved : Boolean = false
+    private var databaseRef : DatabaseReference
 
-//    constructor(ref : DatabaseReference){
-//
-//    }
+    constructor(activity : MainActivity, databaseRef : DatabaseReference){
+        this.activity = activity
+        this.databaseRef = databaseRef
+    }
+    override fun run(){
+        val snapshot = Tasks.await(databaseRef.get())
+        leaderboard = snapshot.value as List<List<String>>
+    }
+
+    fun checkDataRetrieval() : Boolean{
+        return retrieved
+    }
+
     override fun onDataChange(snapshot: DataSnapshot) {
-        var json = JSONArray(snapshot.value.toString())
-        var editable = leaderboard.toMutableList()
-        for (i in 0 until leaderboard.size){
-            var innerEdit = editable[i].toMutableList()
-            var innerJSON = JSONArray(json.get(i))
-            innerEdit[1] = innerJSON.getString(1)
-            innerEdit[2] = innerJSON.getInt(2).toString()
-            editable[i] = innerEdit
-        }
-        leaderboard = editable
+        leaderboard = snapshot.value as List<List<String>>
     }
 
     override fun onCancelled(error: DatabaseError) {
@@ -41,9 +46,9 @@ class Leaderboard : ValueEventListener {
     }
 
     fun getLeaderboard() : List<List<String>>{
-        leaderboard = List<List<String>>(20, {List(3, {"0"})})
         return leaderboard
     }
+
 //    fun newScore(username : String, score : Int, ref : DatabaseReference){
 //        var editable = leaderboard.toMutableList()
 //        var result = editable

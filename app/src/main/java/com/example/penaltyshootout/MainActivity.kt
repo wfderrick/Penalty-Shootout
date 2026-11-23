@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -27,21 +28,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        pref = this.getSharedPreferences(this.packageName + "_preferences", Context.MODE_PRIVATE )
+        databaseRef = FirebaseDatabase.getInstance().getReference("leaderboard")
+        leaderboard = Leaderboard(this, databaseRef)
+        databaseRef.addValueEventListener(leaderboard)
+        leaderboard.start()
         playButton = findViewById<TextView>(play_button)
         leaderboardButton = findViewById<TextView>(leaderboard_button)
         leaderboardButton.setOnClickListener(this)
         playButton.setOnClickListener(this)
-        pref = this.getSharedPreferences(this.packageName + "_preferences", Context.MODE_PRIVATE )
-
-
-        leaderboard = Leaderboard()
-        var firebase = FirebaseDatabase.getInstance()
-        databaseRef = firebase.getReference("leaderboard")
-        databaseRef.addValueEventListener(leaderboard)
-
     }
-
-
 
     override fun onClick(v : View?){
         when (v?.id){
@@ -50,15 +46,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-//    fun retrieveSavedLeaderBoard(){
-//        pref.getString("leaderboard", null)
-//
-//    }
+    fun retrieveSavedLeaderBoard() : List<List<String>>{
+        pref.getString("leaderboard", null)
+        return listOf(listOf("0","0","0"), listOf("0","0","0"),listOf("0","0","0"),listOf("0","0","0"),listOf("0","0","0"))
+    }
 
 //    fun getLeaderboardFromString(){
 //        var editable = MutableList(20, {Array})
 //
 //    }
+
+    fun saveLeaderboardLocal(){
+        var editor = pref.edit()
+        editor.putString("leaderboard", leaderboard.getLeaderboard().toString())
+        editor.commit()
+    }
 
     fun startPlay(){
         var intent = Intent(this, Game::class.java)
@@ -69,9 +71,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.leaderboard)
         recyclerView = findViewById(id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = MyAdapter(leaderboard.getLeaderboard())
-//        leaderboard.newScore("test", 0, databaseRef)
-
+        var getRes = leaderboard.getLeaderboard()
+        if(getRes.get(0).get(1) == ""){
+            getRes = this.retrieveSavedLeaderBoard()
+        }
+        recyclerView.adapter = MyAdapter(getRes)
 
     }
 }
